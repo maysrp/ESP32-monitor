@@ -7,24 +7,29 @@ import requests
 
 uid="1369152"
 ser=serial.Serial("com3",115200,timeout=0.5)
+url="http://api.bilibili.com/x/relation/stat?vmid="+uid
+headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE' }
 def x(cv):
     if cv<1024*1024*1024:
         return str(cv//(1024*1024))+"MB"
     else:
         return str(round(cv/(1024*1024*1024)))+"GB"
 
-
-
+re=requests.get(url,headers=headers)
+my=re.json()
+if my['code']==0:
+    e= my['data']['follower']
+else:
+    e=0
 while True:
-    url="http://api.bilibili.com/x/relation/stat?vmid="+uid
-    headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE' }
-    re=requests.get(url,headers=headers)
-    my=re.json()
-    if my['code']==0:
-        e= my['data']['follower']
-    else:
-        e=0
     tm=time.localtime()
+    if tm.tm_min%5==0:
+        re=requests.get(url,headers=headers)
+        my=re.json()
+        if my['code']==0:
+            e= my['data']['follower']
+        else:
+            e=0
     f=str(tm.tm_hour)+':'+str(tm.tm_min)
     a=psutil.cpu_count()
     b=psutil.cpu_percent()
