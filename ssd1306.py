@@ -106,11 +106,13 @@ class SSD1306:
     def hline(self, x, y,w, col=1):
         self.framebuf.hline(x, y, w, col)
 
-    def vline(x, y, h,  col=1):
+    def vline(self,x, y, h,  col=1):
         self.framebuf.vline(x, y, h, col)
     
-    def blit(buf,x,y,col=1):
+    def blit(self,buf,x,y,col=1):
         self.framebuf.blit(buf, x, y,col)
+    def fill_rect(self,x, y, w, h, col=1):
+        self.framebuf.fill_rect(x, y, w, h, col)
 
 class SSD1306_I2C(SSD1306):
     def __init__(self, width, height, i2c, addr=0x3c, external_vcc=False):
